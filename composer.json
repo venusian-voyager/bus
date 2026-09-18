@@ -1,0 +1,41 @@
+{
+    "name": "venusian-voyager/bus",
+    "description": "The Voyager Bus package.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Angel Gonzalez",
+            "email": "angel@projectsaturnstudios.com"
+        },
+        {
+            "name": "Taylor Otwell"
+        }
+    ],
+    "require": {
+        "php": "^8.4|^8.5",
+        "venusian-voyager/collections": "^0.8.0",
+        "venusian-voyager/contracts": "^0.8.0",
+        "venusian-voyager/pipeline": "^0.8.0",
+        "venusian-voyager/nuts-and-bolts": "^0.8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Voyager\\Bus\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.8.x-dev"
+        },
+        "venusian": {
+            "upstream": "laravel/framework",
+            "upstream-ref": "v12.67.0",
+            "upstream-path": "src/Illuminate/Bus",
+            "ported-at": "2026-08-19"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev"
+}
