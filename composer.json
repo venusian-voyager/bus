@@ -13,9 +13,9 @@
     ],
     "require": {
         "php": "^8.4|^8.5",
-        "venusian-voyager/collections": "^0.8.0",
-        "venusian-voyager/contracts": "^0.8.0",
         "venusian-voyager/pipeline": "^0.8.0",
+        "venusian-voyager/contracts": "^0.8.0",
+        "venusian-voyager/collections": "^0.8.0",
         "venusian-voyager/nuts-and-bolts": "^0.8.0"
     },
     "autoload": {
@@ -25,13 +25,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "0.8.x-dev"
-        },
-        "venusian": {
-            "upstream": "laravel/framework",
-            "upstream-ref": "v12.67.0",
-            "upstream-path": "src/Illuminate/Bus",
-            "ported-at": "2026-08-19"
+            "dev-main": "0.9.x-dev"
         }
     },
     "config": {

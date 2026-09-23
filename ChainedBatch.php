@@ -2,10 +2,10 @@
 
 namespace Voyager\Bus;
 
-use Voyager\Vessel\Vessel;
+use Voyager\Vessel\ControlPanel;
 use Voyager\Contracts\Bus\Dispatcher;
 use Voyager\Contracts\Queue\ShouldQueue;
-use Voyager\System\Bus\Dispatchable;
+use Voyager\Core\Bus\Dispatchable;
 use Voyager\Queue\InteractsWithQueue;
 use Voyager\NutsAndBolts\Collection;
 use Throwable;
@@ -72,7 +72,7 @@ class ChainedBatch implements ShouldQueue
      *
      * @return void
      */
-    public function handle(): void
+    public function handle(): mixed
     {
         $this->attachRemainderOfChainToEndOfBatch(
             $this->toPendingBatch()
@@ -86,7 +86,7 @@ class ChainedBatch implements ShouldQueue
      */
     public function toPendingBatch(): PendingBatch
     {
-        $batch = Vessel::getInstance()->make(Dispatcher::class)->batch($this->jobs);
+        $batch = ControlPanel::getInstance()->make(Dispatcher::class)->batch($this->jobs);
 
         $batch->name = $this->name;
         $batch->options = $this->options;
@@ -132,7 +132,7 @@ class ChainedBatch implements ShouldQueue
 
             $batch->finally(function (Batch $batch) use ($next) {
                 if (! $batch->cancelled()) {
-                    Vessel::getInstance()->make(Dispatcher::class)->dispatch($next);
+                    ControlPanel::getInstance()->make(Dispatcher::class)->dispatch($next);
                 }
             });
 

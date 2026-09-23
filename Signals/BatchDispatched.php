@@ -1,10 +1,10 @@
 <?php
 
-namespace Voyager\Bus\Events;
+namespace Voyager\Bus\Signals;
 
 use Voyager\Bus\Batch;
 
-class BatchCanceled
+class BatchDispatched
 {
     /**
      * Create a new event instance.

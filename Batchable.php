@@ -3,7 +3,7 @@
 namespace Voyager\Bus;
 
 use Carbon\CarbonImmutable;
-use Voyager\Vessel\Vessel;
+use Voyager\Vessel\ControlPanel;
 use Voyager\NutsAndBolts\DataObjects\Str;
 use Voyager\Testing\Fakes\BatchFake;
 
@@ -35,7 +35,7 @@ trait Batchable
         }
 
         if ($this->batchId) {
-            return Vessel::getInstance()->make(BatchRepository::class)?->find($this->batchId);
+            return ControlPanel::getInstance()->make(BatchRepository::class)?->find($this->batchId);
         }
 
         return null;

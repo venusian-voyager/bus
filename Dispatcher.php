@@ -2,12 +2,13 @@
 
 namespace Voyager\Bus;
 
+use Voyager\Vessel\ControlPanel;
 use Closure;
 use Voyager\Contracts\Bus\QueueingDispatcher;
-use Voyager\Contracts\Vessel\Vessel;
+use Voyager\Contracts\Vessel\TheServiceContainer;
 use Voyager\Contracts\Queue\Queue;
 use Voyager\Contracts\Queue\ShouldQueue;
-use Voyager\System\Bus\PendingChain;
+use Voyager\Core\Bus\PendingChain;
 use Voyager\Pipeline\Pipeline;
 use Voyager\Queue\InteractsWithQueue;
 use Voyager\Queue\Jobs\SyncJob;
@@ -21,7 +22,7 @@ class Dispatcher implements QueueingDispatcher
      *
      * @var \Voyager\Contracts\Vessel\Vessel
      */
-    protected Vessel $container;
+    protected TheServiceContainer $container;
 
     /**
      * The pipeline instance for the bus.
@@ -61,7 +62,7 @@ class Dispatcher implements QueueingDispatcher
     /**
      * Create a new command dispatcher instance.
      */
-    public function __construct(Vessel $container, ?Closure $queueResolver = null)
+    public function __construct(ControlPanel $container, ?Closure $queueResolver = null)
     {
         $this->container = $container;
         $this->queueResolver = $queueResolver;
@@ -158,7 +159,7 @@ class Dispatcher implements QueueingDispatcher
      * Create a new chain of queueable jobs.
      *
      * @param  \Voyager\NutsAndBolts\Collection|array|null  $jobs
-     * @return \Voyager\System\Bus\PendingChain
+     * @return \Voyager\Core\Bus\PendingChain
      */
     public function chain(mixed $jobs = null): PendingChain
     {

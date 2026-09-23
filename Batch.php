@@ -4,10 +4,10 @@ namespace Voyager\Bus;
 
 use Carbon\CarbonImmutable;
 use Closure;
-use Voyager\Bus\Events\BatchCanceled;
-use Voyager\Bus\Events\BatchFinished;
-use Voyager\Vessel\Vessel;
-use Voyager\Contracts\Events\Dispatcher;
+use Voyager\Bus\Signals\BatchCanceled;
+use Voyager\Bus\Signals\BatchFinished;
+use Voyager\Vessel\ControlPanel;
+use Voyager\Contracts\Signals\SignalDispatcher as Dispatcher;
 use Voyager\Contracts\Queue\Factory as QueueFactory;
 use Voyager\Contracts\NutsAndBolts\Arrayable;
 use Voyager\Queue\CallQueuedClosure;
@@ -237,9 +237,9 @@ class Batch implements Arrayable, JsonSerializable
         if ($counts->pendingJobs === 0) {
             $this->repository->markAsFinished($this->id);
 
-            $vessel = Vessel::getInstance();
+            $vessel = ControlPanel::getInstance();
 
-            if ($vessel->bound(Dispatcher::class)) {
+            if ($vessel->isBound(Dispatcher::class)) {
                 $vessel->make(Dispatcher::class)->dispatch(new BatchFinished($this));
             }
         }
@@ -405,9 +405,9 @@ class Batch implements Arrayable, JsonSerializable
     {
         $this->repository->cancel($this->id);
 
-        $vessel = Vessel::getInstance();
+        $vessel = ControlPanel::getInstance();
 
-        if ($vessel->bound(Dispatcher::class)) {
+        if ($vessel->isBound(Dispatcher::class)) {
             $vessel->make(Dispatcher::class)->dispatch(new BatchCanceled($this));
         }
     }

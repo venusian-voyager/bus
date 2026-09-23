@@ -3,7 +3,7 @@
 namespace Voyager\Bus;
 
 use Aws\DynamoDb\DynamoDbClient;
-use Voyager\Vessel\Vessel;
+use Voyager\Vessel\ControlPanel;
 use Voyager\Contracts\Bus\Dispatcher as DispatcherContract;
 use Voyager\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
 use Voyager\Contracts\Queue\Factory as QueueFactoryContract;
@@ -20,9 +20,9 @@ class BusServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     public function register(): void
     {
-        $this->app->singleton(Dispatcher::class, function ($app) {
+        $this->app->registerSingleton(Dispatcher::class, function ($app) {
             return new Dispatcher($app, function ($connection = null) {
-                return Vessel::getInstance()->make(QueueFactoryContract::class)->connection($connection);
+                return ControlPanel::getInstance()->make(QueueFactoryContract::class)->connection($connection);
             });
         });
 
@@ -44,7 +44,7 @@ class BusServiceProvider extends ServiceProvider implements DeferrableProvider
      */
     protected function registerBatchServices(): void
     {
-        $this->app->singleton(BatchRepository::class, function ($app) {
+        $this->app->registerSingleton(BatchRepository::class, function ($app) {
             $driver = $app->config->get('queue.batching.driver', 'database');
 
             return $driver === 'dynamodb'
@@ -52,7 +52,7 @@ class BusServiceProvider extends ServiceProvider implements DeferrableProvider
                 : $app->make(DatabaseBatchRepository::class);
         });
 
-        $this->app->singleton(DatabaseBatchRepository::class, function ($app) {
+        $this->app->registerSingleton(DatabaseBatchRepository::class, function ($app) {
             return new DatabaseBatchRepository(
                 $app->make(BatchFactory::class),
                 $app->make('db')->connection($app->config->get('queue.batching.database')),
@@ -60,7 +60,7 @@ class BusServiceProvider extends ServiceProvider implements DeferrableProvider
             );
         });
 
-        $this->app->singleton(DynamoBatchRepository::class, function ($app) {
+        $this->app->registerSingleton(DynamoBatchRepository::class, function ($app) {
             $config = $app->config->get('queue.batching');
 
             $dynamoConfig = [

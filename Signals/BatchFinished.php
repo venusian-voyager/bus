@@ -1,6 +1,6 @@
 <?php
 
-namespace Voyager\Bus\Events;
+namespace Voyager\Bus\Signals;
 
 use Voyager\Bus\Batch;
 

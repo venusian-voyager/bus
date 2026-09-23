@@ -2,10 +2,11 @@
 
 namespace Voyager\Bus;
 
+use Voyager\Vessel\ControlPanel;
 use Closure;
-use Voyager\Bus\Events\BatchDispatched;
-use Voyager\Contracts\Vessel\Vessel;
-use Voyager\Contracts\Events\Dispatcher as EventDispatcher;
+use Voyager\Bus\Signals\BatchDispatched;
+use Voyager\Contracts\Vessel\TheServiceContainer;
+use Voyager\Contracts\Signals\SignalDispatcher as EventDispatcher;
 use Voyager\NutsAndBolts\DataObjects\Arr;
 use Voyager\NutsAndBolts\Collection;
 use Voyager\NutsAndBolts\Concerns\Conditionable;
@@ -25,7 +26,7 @@ class PendingBatch
      *
      * @var \Voyager\Contracts\Vessel\Vessel
      */
-    protected Vessel $container;
+    protected TheServiceContainer $container;
 
     /**
      * The batch name.
@@ -61,7 +62,7 @@ class PendingBatch
      * @param  \Voyager\Contracts\Vessel\Vessel  $container
      * @param  \Voyager\NutsAndBolts\Collection  $jobs
      */
-    public function __construct(Vessel $container, Collection $jobs)
+    public function __construct(ControlPanel $container, Collection $jobs)
     {
         $this->container = $container;
 
