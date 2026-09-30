@@ -5,7 +5,7 @@ namespace Voyager\Bus;
 use Carbon\CarbonImmutable;
 use Voyager\Vessel\ControlPanel;
 use Voyager\NutsAndBolts\DataObjects\Str;
-use Voyager\Testing\Fakes\BatchFake;
+use Voyager\Bus\Testing\BatchFake;
 
 trait Batchable
 {
@@ -19,7 +19,7 @@ trait Batchable
     /**
      * The fake batch, if applicable.
      *
-     * @var \Voyager\Testing\Fakes\BatchFake
+     * @var \Voyager\Bus\Testing\BatchFake
      */
     private $fakeBatch;
 
@@ -79,7 +79,7 @@ trait Batchable
      * @param  \Carbon\CarbonImmutable|null  $createdAt
      * @param  \Carbon\CarbonImmutable|null  $cancelledAt
      * @param  \Carbon\CarbonImmutable|null  $finishedAt
-     * @return array{0: $this, 1: \Voyager\Testing\Fakes\BatchFake}
+     * @return array{0: $this, 1: \Voyager\Bus\Testing\BatchFake}
      */
     public function withFakeBatch(string $id = '',
                                   string $name = '',

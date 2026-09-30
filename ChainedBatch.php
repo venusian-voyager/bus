@@ -74,7 +74,7 @@ class ChainedBatch implements ShouldQueue
      */
     public function handle(): mixed
     {
-        $this->attachRemainderOfChainToEndOfBatch(
+        return $this->attachRemainderOfChainToEndOfBatch(
             $this->toPendingBatch()
         )->dispatch();
     }

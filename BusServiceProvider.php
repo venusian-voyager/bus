@@ -2,13 +2,12 @@
 
 namespace Voyager\Bus;
 
-use Aws\DynamoDb\DynamoDbClient;
+use InvalidArgumentException;
 use Voyager\Vessel\ControlPanel;
 use Voyager\Contracts\Bus\Dispatcher as DispatcherContract;
 use Voyager\Contracts\Bus\QueueingDispatcher as QueueingDispatcherContract;
 use Voyager\Contracts\Queue\Factory as QueueFactoryContract;
 use Voyager\Contracts\NutsAndBolts\DeferrableProvider;
-use Voyager\NutsAndBolts\DataObjects\Arr;
 use Voyager\NutsAndBolts\ServiceProvider;
 
 class BusServiceProvider extends ServiceProvider implements DeferrableProvider
@@ -45,45 +44,20 @@ class BusServiceProvider extends ServiceProvider implements DeferrableProvider
     protected function registerBatchServices(): void
     {
         $this->app->registerSingleton(BatchRepository::class, function ($app) {
-            $driver = $app->config->get('queue.batching.driver', 'database');
+            $driver = $app['config']->get('queue.batching.driver', 'database');
 
-            return $driver === 'dynamodb'
-                ? $app->make(DynamoBatchRepository::class)
-                : $app->make(DatabaseBatchRepository::class);
+            if ($driver !== 'database') {
+                throw new InvalidArgumentException("Batch driver [{$driver}] is not supported: batches are kept in a database table (queue.batching.driver 'database').");
+            }
+
+            return $app->make(DatabaseBatchRepository::class);
         });
 
         $this->app->registerSingleton(DatabaseBatchRepository::class, function ($app) {
             return new DatabaseBatchRepository(
                 $app->make(BatchFactory::class),
-                $app->make('db')->connection($app->config->get('queue.batching.database')),
-                $app->config->get('queue.batching.table', 'job_batches')
-            );
-        });
-
-        $this->app->registerSingleton(DynamoBatchRepository::class, function ($app) {
-            $config = $app->config->get('queue.batching');
-
-            $dynamoConfig = [
-                'region' => $config['region'],
-                'version' => 'latest',
-                'endpoint' => $config['endpoint'] ?? null,
-            ];
-
-            if (! empty($config['key']) && ! empty($config['secret'])) {
-                $dynamoConfig['credentials'] = Arr::only($config, ['key', 'secret']);
-
-                if (! empty($config['token'])) {
-                    $dynamoConfig['credentials']['token'] = $config['token'];
-                }
-            }
-
-            return new DynamoBatchRepository(
-                $app->make(BatchFactory::class),
-                new DynamoDbClient($dynamoConfig),
-                $app->config->get('app.name'),
-                $app->config->get('queue.batching.table', 'job_batches'),
-                ttl: $app->config->get('queue.batching.ttl', null),
-                ttlAttribute: $app->config->get('queue.batching.ttl_attribute', 'ttl'),
+                $app->make('db')->connection($app['config']->get('queue.batching.database')),
+                $app['config']->get('queue.batching.table', 'job_batches')
             );
         });
     }

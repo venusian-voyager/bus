@@ -13,10 +13,18 @@
     ],
     "require": {
         "php": "^8.4|^8.5",
-        "venusian-voyager/pipeline": "^0.8.0",
-        "venusian-voyager/contracts": "^0.8.0",
-        "venusian-voyager/collections": "^0.8.0",
-        "venusian-voyager/nuts-and-bolts": "^0.8.0"
+        "laravel/serializable-closure": "^2.0",
+        "nesbot/carbon": "^3.8.4",
+        "venusian-voyager/collections": "^0.10.0",
+        "venusian-voyager/conditionable": "^0.10.0",
+        "venusian-voyager/contracts": "^0.10.0",
+        "venusian-voyager/nuts-and-bolts": "^0.10.0",
+        "venusian-voyager/pipeline": "^0.10.0",
+        "venusian-voyager/queue": "^0.10.0",
+        "venusian-voyager/vessel": "^0.10.0"
+    },
+    "suggest": {
+        "venusian-voyager/database": "Required to keep batches in the database (^0.10.0)."
     },
     "autoload": {
         "psr-4": {
@@ -25,7 +33,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "0.9.x-dev"
+            "dev-main": "0.10.x-dev"
         }
     },
     "config": {
